@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arkanoid game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <canvas id="arkanoid" width="480" height="320"></canvas>
+        
+        <div class="stats-panel">
+            <div class="stat-block">
+                <div class="stat-label">SCORE</div>
+                <div id="scoreDisplay" class="stat-value">0</div>
+            </div>
+            <div class="stat-block">
+                <div class="stat-label">LIVES</div>
+                <div id="livesDisplay" class="stat-value">3</div>
+            </div>
+            <div class="stat-block level-block">
+                <div class="stat-label">LEVEL</div>
+                <div id="levelDisplay" class="level-value">1</div>
+            </div>
+        </div>
+    </div>
+
+    <button id="startPauseBtn" class="start-btn">▶ START</button>
+    
+    <script src="scriptClass.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+body {
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: 'Arial', sans-serif;
+}
+
+.game-container {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+canvas {
+    border: 2px solid #fff;
+    border-radius: 10px;
+    background-color: #000;
+}
+
+.stats-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    min-width: 140px;
+}
+
+.stat-block {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.level-block {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5253 100%);
+}
+
+.stat-label {
+    color: rgba(255,255,255,0.9);
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.stat-value, .level-value {
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+#scoreDisplay, #livesDisplay {
+    transition: all 0.3s ease;
+}
+
+.highlight-score, .highlight-lives {
+    transform: scale(1.2);
+    color: #ffd700;
+    text-shadow: 0 0 20px #ffd700;
+}
+
+.start-btn {
+    margin-top: 20px;
+    padding: 15px 50px;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #00b09b, #96c93d);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    border: 2px solid rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+}
+
+.start-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+    background: linear-gradient(135deg, #00c9a7, #a8e063);
+}
+
+.start-btn:active {
+    transform: translateY(0);
+}
+
+.start-btn.paused {
+    background: linear-gradient(135deg, #ff6b6b, #ee5253);
+}
+
+.start-btn.paused:hover {
+    background: linear-gradient(135deg, #ff8787, #ff6b6b);
+}
