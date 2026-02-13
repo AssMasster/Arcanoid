@@ -1,0 +1,51 @@
+export class Renderer {
+    constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+    }
+
+    clear() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    drawBackground(level) {
+        const levelColors = {
+            1: 'rgba(0, 20, 0, 0.1)',
+            2: 'rgba(0, 0, 30, 0.1)',
+            3: 'rgba(30, 0, 0, 0.1)'
+        };
+        
+        this.ctx.fillStyle = levelColors[level] || '#000000';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+
+    drawBall(ball) {
+        this.ctx.fillStyle = ball.color;
+        this.ctx.beginPath();
+        this.ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+        this.ctx.fill();
+        this.ctx.closePath();
+    }
+
+    drawPaddle(paddle) {
+        this.ctx.fillStyle = paddle.color;
+        this.ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+    }
+
+    drawBricks(bricks) {
+        bricks.forEach(brick => {
+            if (brick.isActive) {
+                this.ctx.fillStyle = brick.color;
+                this.ctx.fillRect(brick.x, brick.y, brick.width, brick.height);
+            }
+        });
+    }
+
+    drawGame(state) {
+        this.clear();
+        this.drawBackground(state.currentLevel);
+        this.drawBall(state.ball);
+        this.drawPaddle(state.paddle);
+        this.drawBricks(state.bricks);
+    }
+}
