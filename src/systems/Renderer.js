@@ -40,12 +40,29 @@ export class Renderer {
             }
         });
     }
-
+    drawPowerUp(powerUp) {
+        // Проверяем, что объект существует
+        if (!powerUp || !powerUp.isActive) return;
+        
+        // Рисуем круг
+        this.ctx.beginPath();
+        this.ctx.arc(powerUp.x, powerUp.y, powerUp.radius, 0, Math.PI * 2);
+        this.ctx.fillStyle = "#FFD700"; // золотой цвет
+        this.ctx.fill();
+        this.ctx.closePath();
+        
+        // Рисуем плюсик внутри
+        this.ctx.fillStyle = "#FFFFFF";
+        this.ctx.font = `bold ${powerUp.radius}px Arial`;
+        this.ctx.fillText('+', powerUp.x, powerUp.y);
+    }
     drawGame(state) {
         this.clear();
         this.drawBackground(state.currentLevel);
         this.drawBall(state.ball);
         this.drawPaddle(state.paddle);
         this.drawBricks(state.bricks);
+        this.drawPowerUp(state.powerUp);
+        this.drawPowerUp(state.powerUp);
     }
 }

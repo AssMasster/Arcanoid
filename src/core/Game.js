@@ -1,6 +1,7 @@
 import { GameState } from './GameState.js';
 import { Ball } from '../entities/Ball.js';
 import { Paddle } from '../entities/Paddle.js';
+import { PowerUp } from '../entities/PowerUp.js';
 import { LevelManager } from '../systems/LevelManager.js';
 import { CollisionSystem } from '../systems/CollisionSystem.js';
 import { Renderer } from '../systems/Renderer.js';
@@ -23,6 +24,8 @@ export class Game {
         this.ball = null;
         this.paddle = null;
         this.bricks = [];
+
+        this.powerUp = null;
         
         this.init();
     }
@@ -30,6 +33,8 @@ export class Game {
     init() {
         this.paddle = new Paddle('NORMAL', this.canvas.width);
         this.paddle.setY(this.canvas.height - CONFIG.PADDLE.HEIGHT);
+
+        this.powerUp = new PowerUp(15, 200, -20); 
         
         this.resetBall();
         this.loadLevel(this.state.currentLevel);
@@ -80,6 +85,8 @@ export class Game {
 
     update() {
         if (!this.canInteract() || this.state.isGameOver) return;
+    
+        this.powerUp.move();
 
         this.ball.move();
         this.checkCollisions();
@@ -107,6 +114,10 @@ export class Game {
             this.soundManager.play('tap');
         }
 
+        if (this.collisionSystem.detectPowerUpPaddle(this.powerUp, this.paddle)) {
+            this.powerUp.colision()
+        }
+
         // Кирпичи
         this.bricks.forEach(brick => {
             const collision = this.collisionSystem.detectBallBrick(this.ball, brick);
@@ -124,6 +135,15 @@ export class Game {
                 if (brick.hit(this.ball.damage)) {
                     this.state.addScore(brick.points);
                     this.uiManager.updateScore(this.state.score);
+                    
+                    if (Math.random() < 0.3) {
+                        console.log('spawn power')
+                        this.powerUp = new PowerUp(
+                            15,
+                            brick.x + brick.width / 2,
+                            brick.y + brick.height / 2
+                        );
+                    }
                 }
             }
         });
@@ -189,7 +209,8 @@ export class Game {
             ball: this.ball,
             paddle: this.paddle,
             bricks: this.bricks,
-            currentLevel: this.state.currentLevel
+            currentLevel: this.state.currentLevel,
+            powerUp: this.powerUp
         });
 
         // Отрисовка экранов (можно вынести в отдельный ScreenManager)

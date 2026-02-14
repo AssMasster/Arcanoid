@@ -36,8 +36,8 @@ export class Brick {
     updateColor() {
         const intensity = this.hp / this.maxHp;
         
-        const minLightness = 25;
-        const maxLightness = 75;  
+        const minLightness = 20;
+        const maxLightness = 80;  
 
         const lightness = minLightness + (1 - intensity) * (maxLightness - minLightness);
 

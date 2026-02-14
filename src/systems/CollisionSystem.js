@@ -8,6 +8,15 @@ export class CollisionSystem {
                ballBounds.left <= paddleBounds.right;
     }
 
+    detectPowerUpPaddle(powerUp, paddle) {
+        const powerUpBounds = powerUp.getBounds();
+        const paddleBounds = paddle.getBounds();
+        
+        return powerUpBounds.bottom >= paddleBounds.top &&
+               powerUpBounds.right >= paddleBounds.left &&
+               powerUpBounds.left <= paddleBounds.right;
+    }
+
     detectBallBrick(ball, brick) {
         if (!brick.isActive) return null;
         

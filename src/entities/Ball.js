@@ -1,7 +1,7 @@
 import { CONFIG } from '../core/config.js';
 
 export class Ball {
-    constructor(type = 'POWER', x, y) {
+    constructor(type = 'NORMAL', x, y) {
         this.type = type;
         this.config = CONFIG.BALL.TYPES[type];
         this.radius = CONFIG.BALL.RADIUS;

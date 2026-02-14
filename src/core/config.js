@@ -1,4 +1,3 @@
-// core/config.js
 export const CONFIG = {
     BALL: {
         RADIUS: 10,
