@@ -132,6 +132,14 @@ export const CONFIG = {
             availableTypes: ['IRON', 'GOLD', 'DIAMOND']
         }
     },
+
+    POWERUP: {
+        spawnProbability: 0.3,
+        availableTypes: [
+            'EXPAND',
+            'SPEED'
+        ],
+    },
     
     SCREEN: {
         WIDTH: 480,

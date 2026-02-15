@@ -17,6 +17,10 @@ export class PowerUp {
         this.isActive = false;
     }
 
+    bounceY() {
+        this.dy = -this.dy;
+    }
+
     getBounds() {
         return {
             left: this.x - this.radius,

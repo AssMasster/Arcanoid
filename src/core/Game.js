@@ -8,7 +8,10 @@ import { Renderer } from '../systems/Renderer.js';
 import { InputHandler } from '../systems/InputHandler.js';
 import { UIManager } from '../ui/UIManager.js';
 import { SoundManager } from '../systems/SoundManager.js';
+import { PowerUpManager } from '../systems/PowerUpManager.js';
+import { EffectManager } from '../systems/EffectManager.js';
 import { CONFIG } from './config.js';
+
 
 export class Game {
     constructor(canvas) {
@@ -20,13 +23,21 @@ export class Game {
         this.uiManager = new UIManager();
         this.soundManager = new SoundManager();
         this.inputHandler = new InputHandler(this);
+        this.powerUpManager = new PowerUpManager();
+        this.effectManager = new EffectManager(this);
+
+        this.lastTimestamp = 0;
+
+        this.default = {
+            paddle: new Paddle('NORMAL', this.canvas.width),
+            ball: new Ball('NORMAL', this.canvas.width / 2, this.canvas.height - 40),
+        }
         
         this.ball = null;
         this.paddle = null;
         this.bricks = [];
-
-        this.powerUp = null;
-        
+        this.powerUps = [];
+        this.effects = [];
         this.init();
     }
 
@@ -34,7 +45,7 @@ export class Game {
         this.paddle = new Paddle('NORMAL', this.canvas.width);
         this.paddle.setY(this.canvas.height - CONFIG.PADDLE.HEIGHT);
 
-        this.powerUp = new PowerUp(15, 200, -20); 
+        this.powerUps.push(new PowerUp(15, 200, -20)); 
         
         this.resetBall();
         this.loadLevel(this.state.currentLevel);
@@ -83,11 +94,15 @@ export class Game {
         this.paddle.moveTo(mouseX - this.paddle.width / 2);
     }
 
-    update() {
+    update(deltaTime) {
         if (!this.canInteract() || this.state.isGameOver) return;
-    
-        this.powerUp.move();
 
+        if (this.powerUps.length > 0) {
+            this.powerUps.forEach((powerUp) => {
+                powerUp.move();
+            })
+        }
+        this.effectManager.updateEffects(deltaTime)
         this.ball.move();
         this.checkCollisions();
     }
@@ -113,11 +128,16 @@ export class Game {
             this.ball.bounceY();
             this.soundManager.play('tap');
         }
-
-        if (this.collisionSystem.detectPowerUpPaddle(this.powerUp, this.paddle)) {
-            this.powerUp.colision()
+        // Бонус с платформой
+        if (this.powerUps.length > 0) {
+            this.powerUps.forEach((powerUp) => {
+                if (this.collisionSystem.detectPowerUpPaddle(powerUp, this.paddle)) {
+                    powerUp.colision()
+                    powerUp.bounceY()
+                    this.effectManager.addEffect(powerUp.type)
+                }
+            })
         }
-
         // Кирпичи
         this.bricks.forEach(brick => {
             const collision = this.collisionSystem.detectBallBrick(this.ball, brick);
@@ -135,15 +155,10 @@ export class Game {
                 if (brick.hit(this.ball.damage)) {
                     this.state.addScore(brick.points);
                     this.uiManager.updateScore(this.state.score);
-                    
-                    if (Math.random() < 0.3) {
-                        console.log('spawn power')
-                        this.powerUp = new PowerUp(
-                            15,
-                            brick.x + brick.width / 2,
-                            brick.y + brick.height / 2
-                        );
-                    }
+                    const powerUp = this.powerUpManager.spawnPowerUp(brick)
+                    if (powerUp) {
+                        this.powerUps.push(powerUp)
+                    }  
                 }
             }
         });
@@ -176,6 +191,10 @@ export class Game {
                 alert(`Level ${this.state.currentLevel - 1} complete! Moving to level ${this.state.currentLevel}!`);
                 this.loadLevel(this.state.currentLevel);
                 this.resetBall();
+
+                this.effectManager.clearEffects();
+                this.powerUps = []
+
                 this.ball.start();
                 this.uiManager.updateLevel(this.state.currentLevel);
             } else {
@@ -197,6 +216,11 @@ export class Game {
     restart() {
         this.state.reset();
         this.resetBall();
+
+
+        this.effectManager.clearEffects()
+        this.powerUps = []
+
         this.loadLevel(1);
         this.uiManager.updateScore(0);
         this.uiManager.updateLives(3);
@@ -210,7 +234,7 @@ export class Game {
             paddle: this.paddle,
             bricks: this.bricks,
             currentLevel: this.state.currentLevel,
-            powerUp: this.powerUp
+            powerUps: this.powerUps
         });
 
         // Отрисовка экранов (можно вынести в отдельный ScreenManager)
@@ -252,9 +276,19 @@ export class Game {
         ctx.fillText('Press SPACE or click RESUME', this.canvas.width / 2 - 110, this.canvas.height / 2 + 20);
     }
     //
-    gameLoop = () => {
-        this.update();
+    gameLoop = (timestamp) => {  // timestamp приходит от requestAnimationFrame
+        if (!this.lastTimestamp) {
+            this.lastTimestamp = timestamp;
+            requestAnimationFrame(this.gameLoop);
+            return;
+        }
+        
+        const deltaTime = timestamp - this.lastTimestamp;  // разница во времени
+        this.lastTimestamp = timestamp;
+        
+        this.update(deltaTime);  // передаём в update
         this.draw();
+        
         requestAnimationFrame(this.gameLoop);
     }
 
