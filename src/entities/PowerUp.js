@@ -1,11 +1,12 @@
 export class PowerUp {
-    constructor(radius, x, y) {
+    constructor(radius, x, y, type) {
         this.radius = radius;
         this.x = x;             
         this.y = y;
         this.dy = 2;                   
         this.color = "#FFD700";     
         this.isActive = true;
+        this.type = type
     }
 
     move() {
