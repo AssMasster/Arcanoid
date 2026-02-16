@@ -3,7 +3,7 @@ import { Effect } from '../Effect.js';
 export class SpeedBallEffect extends Effect {
     constructor(ball, defaultValue) {
         super('SPEED', ball);
-        this.totalDuration = 3000;
+        this.totalDuration = 5000;
         this.originalSpeed = ball.speed;
         this.originalDx = ball.dx;
         this.originalDy = ball.dy;
@@ -13,8 +13,8 @@ export class SpeedBallEffect extends Effect {
     }
 
     onApply() {
-        this.target.speed = this.originalSpeed * 1.5;
-        this.target.color = "#FF0000"
+        this.target.speed = this.originalSpeed + this.defaultSpeed * 0.5;
+        this.target.color = "#FFDD00"
         // Обновляем компоненты скорости, сохраняя направление
         const directionX = Math.sign(this.target.dx);
         const directionY = Math.sign(this.target.dy);
@@ -24,7 +24,11 @@ export class SpeedBallEffect extends Effect {
 
     onExpire() {
         this.target.color = this.defaultColor
-        this.target.speed = this.defaultSpeed;
+        if (this.originalSpeed === this.defaultSpeed) {
+            this.target.speed = this.defaultSpeed
+        } else {
+            this.target.speed = this.originalSpeed - this.defaultSpeed;
+        }
         const directionX = Math.sign(this.target.dx);
         const directionY = Math.sign(this.target.dy);
         this.target.dx = directionX * this.target.speed;

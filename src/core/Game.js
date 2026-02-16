@@ -45,7 +45,7 @@ export class Game {
         this.paddle = new Paddle('NORMAL', this.canvas.width);
         this.paddle.setY(this.canvas.height - CONFIG.PADDLE.HEIGHT);
 
-        this.powerUps.push(new PowerUp(15, 200, -20)); 
+        this.powerUps.push(new PowerUp(15, 200, -20, 'SPEED')); 
         
         this.resetBall();
         this.loadLevel(this.state.currentLevel);

@@ -1,5 +1,6 @@
 import { ExpandPaddleEffect } from '../entities/effects/ExpandPaddle.js';
 import { SpeedBallEffect } from '../entities/effects/SpeedBall.js';
+import { DamageBallEffect } from '../entities/effects/DamageBall.js';
 // Импортируйте другие эффекты по мере добавления
 
 export class EffectManager {
@@ -22,6 +23,9 @@ export class EffectManager {
                 effect = new SpeedBallEffect(this.game.ball, this.game.default.ball);
                 break;
             // Добавляйте новые типы здесь
+            case 'DAMAGE':
+                effect = new DamageBallEffect(this.game.ball, this.game.default.ball);
+                break;
             default:
                 console.warn(`Неизвестный тип эффекта: ${powerUpType}`);
                 return null;

@@ -1,3 +1,5 @@
+import { getPowerUpStyle } from "../ui/powerUpStyles.js";
+
 export class Renderer {
     constructor(canvas) {
         this.canvas = canvas;
@@ -46,16 +48,17 @@ export class Renderer {
         
         powerUps.forEach((powerUp) => {
             if (!powerUp.isActive) return
+            const style = getPowerUpStyle(powerUp.type)
             this.ctx.beginPath();
             this.ctx.arc(powerUp.x, powerUp.y, powerUp.radius, 0, Math.PI * 2);
-            this.ctx.fillStyle = "#FFD700"; // золотой цвет
+            this.ctx.fillStyle = style.color;
             this.ctx.fill();
             this.ctx.closePath();
             
             // Рисуем плюсик внутри
-            this.ctx.fillStyle = "#FFFFFF";
+            this.ctx.fillStyle = style.symbolColor;
             this.ctx.font = `bold ${powerUp.radius}px Arial`;
-            this.ctx.fillText('+', powerUp.x, powerUp.y);
+            this.ctx.fillText(style.symbol, powerUp.x - 9, powerUp.y + 4);
         })
     }
     drawGame(state) {

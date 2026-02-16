@@ -137,7 +137,8 @@ export const CONFIG = {
         spawnProbability: 0.3,
         availableTypes: [
             'EXPAND',
-            'SPEED'
+            'SPEED',
+            'DAMAGE'
         ],
     },
     
