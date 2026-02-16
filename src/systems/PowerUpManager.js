@@ -10,12 +10,13 @@ export class PowerUpManager {
     spawnPowerUp(origin) {
         if (Math.random() < this.spawnProbability) {
             console.log('spawn power')
-            console.log(this.defineType())
+            const type = this.defineType()
+            console.log(type)
             return new PowerUp(
                 15,
                 origin.x + origin.width / 2,
                 origin.y + origin.height / 2,
-                this.defineType()
+                type
 
             );
         }
