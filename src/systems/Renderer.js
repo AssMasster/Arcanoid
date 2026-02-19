@@ -61,6 +61,25 @@ export class Renderer {
             this.ctx.fillText(style.symbol, powerUp.x - 9, powerUp.y + 4);
         })
     }
+    drawProjectiles(projectiles) {
+        projectiles.forEach(p => {
+            this.ctx.fillStyle = p.color;
+            // Основной корпус
+            this.ctx.fillRect(p.x - p.width / 2, p.y - p.height, p.width, p.height);
+
+            // Хвостовое пламя (для ракеты)
+            if (p.type === 'ROCKET') {
+                this.ctx.fillStyle = '#ff5500';
+                this.ctx.fillRect(p.x - p.width / 2, p.y - p.height, p.width, 4);
+            }
+
+            // Свечение для лазера
+            if (p.type === 'LASER') {
+                this.ctx.fillStyle = 'rgba(255, 200, 0, 0.5)';
+                this.ctx.fillRect(p.x - p.width / 2, p.y - p.height - 2, p.width, 2);
+            }
+        });
+    }
     drawGame(state) {
         this.clear();
         this.drawBackground(state.currentLevel);
@@ -68,5 +87,6 @@ export class Renderer {
         this.drawPaddle(state.paddle);
         this.drawBricks(state.bricks);
         this.drawPowerUps(state.powerUps);
+        this.drawProjectiles(state.projectiles);
     }
 }

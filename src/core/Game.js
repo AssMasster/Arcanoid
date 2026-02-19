@@ -10,6 +10,7 @@ import { UIManager } from '../ui/UIManager.js';
 import { SoundManager } from '../systems/SoundManager.js';
 import { PowerUpManager } from '../systems/PowerUpManager.js';
 import { EffectManager } from '../systems/EffectManager.js';
+import { WeaponManager } from '../systems/WeaponManager.js';
 import { CONFIG } from './config.js';
 
 
@@ -25,6 +26,7 @@ export class Game {
         this.inputHandler = new InputHandler(this);
         this.powerUpManager = new PowerUpManager();
         this.effectManager = new EffectManager(this);
+        this.weaponManager = new WeaponManager(this)
 
         this.lastTimestamp = 0;
 
@@ -45,7 +47,7 @@ export class Game {
         this.paddle = new Paddle('NORMAL', this.canvas.width);
         this.paddle.setY(this.canvas.height - CONFIG.PADDLE.HEIGHT);
 
-        this.powerUps.push(new PowerUp(15, 200, -20, 'SPEED')); 
+        this.powerUps.push(new PowerUp(15, 200, -20, 'ROCKET')); 
         
         this.resetBall();
         this.loadLevel(this.state.currentLevel);
@@ -103,6 +105,7 @@ export class Game {
             })
         }
         this.effectManager.updateEffects(deltaTime)
+        this.weaponManager.update(deltaTime);
         this.ball.move();
         this.checkCollisions();
     }
@@ -130,11 +133,15 @@ export class Game {
         }
         // Бонус с платформой
         if (this.powerUps.length > 0) {
-            this.powerUps.forEach((powerUp) => {
+            this.powerUps.filter(p => p.isActive).forEach((powerUp) => {
                 if (this.collisionSystem.detectPowerUpPaddle(powerUp, this.paddle)) {
                     powerUp.colision()
                     powerUp.bounceY()
-                    this.effectManager.addEffect(powerUp.type)
+                    if (CONFIG.WEAPONS[powerUp.type]) {
+                        this.weaponManager.activateWeapon(powerUp.type);
+                    } else {
+                        this.effectManager.addEffect(powerUp.type);
+                    }
                 }
             })
         }
@@ -217,7 +224,7 @@ export class Game {
         this.state.reset();
         this.resetBall();
 
-
+        this.weaponManager.clear()
         this.effectManager.clearEffects()
         this.powerUps = []
 
@@ -234,7 +241,8 @@ export class Game {
             paddle: this.paddle,
             bricks: this.bricks,
             currentLevel: this.state.currentLevel,
-            powerUps: this.powerUps
+            powerUps: this.powerUps,
+            projectiles: this.weaponManager.projectiles
         });
 
         // Отрисовка экранов (можно вынести в отдельный ScreenManager)

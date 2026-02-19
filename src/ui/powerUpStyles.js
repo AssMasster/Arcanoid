@@ -16,29 +16,19 @@ export const POWER_UP_STYLES = {
         symbol: '⚔️',
         symbolColor: '#ffffff',
         description: 'Урон шара',
-
     },
-    MULTI: {
+    LASER: {
         color: '#ff00ff',
-        symbol: '3',
+        symbol: '⚡',
         symbolColor: '#ffffff',
-        description: 'Мульти мяч',
-
+        description: 'Лазерные пушки',
     },
-    LIFE: {
-        color: '#ff5555',
-        symbol: '❤️',
+    ROCKET: {
+        color: '#ffaa00',
+        symbol: '🚀',
         symbolColor: '#ffffff',
-        description: 'Дополнительная жизнь',
-
+        description: 'Ракеты',
     },
-    SHRINK: {
-        color: '#ff0000',
-        symbol: '⇒⇐',
-        symbolColor: '#ffffff',
-        description: 'Сужение платформы',
-
-    }
 };
 
 // Функция для получения стиля по типу (с защитой)
@@ -48,6 +38,5 @@ export const getPowerUpStyle = (type) => {
         symbol: '?',
         symbolColor: '#ffffff',
         description: 'Неизвестный бонус',
-
     };
 };

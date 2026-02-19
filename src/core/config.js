@@ -138,9 +138,25 @@ export const CONFIG = {
         availableTypes: [
             'EXPAND',
             'SPEED',
-            'DAMAGE'
+            'DAMAGE',
+            'LASER',
+            'ROCKET',
         ],
     },
+    WEAPONS: {
+    LASER: {
+        shots: 3,
+        interval: 1000,    // 1 секунда
+        duration: 5000,    // 5 секунд максимум
+        projectile: 'LaserProjectile'
+    },
+    ROCKET: {
+        shots: 2,
+        interval: 1500,
+        duration: 4000,
+        projectile: 'RocketProjectile'
+    }
+},
     
     SCREEN: {
         WIDTH: 480,
