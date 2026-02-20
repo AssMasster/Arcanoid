@@ -47,7 +47,7 @@ export class Game {
         this.paddle = new Paddle('NORMAL', this.canvas.width);
         this.paddle.setY(this.canvas.height - CONFIG.PADDLE.HEIGHT);
 
-        this.powerUps.push(new PowerUp(15, 200, -20, 'ROCKET')); 
+        this.powerUps.push(new PowerUp(15, 200, -20, 'LASER')); 
         
         this.resetBall();
         this.loadLevel(this.state.currentLevel);
@@ -61,6 +61,7 @@ export class Game {
         this.uiManager.updateLives(this.state.lives);
         this.uiManager.updateLevel(this.state.currentLevel);
         this.uiManager.updateStartPauseButton(false, false);
+        this.uiManager.updateRecord(this.state.record)
     }
 
     resetBall() {
@@ -203,9 +204,9 @@ export class Game {
                 this.powerUps = []
 
                 this.ball.start();
-                this.uiManager.updateLevel(this.state.currentLevel);
             } else {
                 alert('YOU WIN! Congratulations!');
+                this.state.updateRecord()
                 this.restart();
             }
         }, 100);
@@ -213,6 +214,7 @@ export class Game {
 
     handleGameOver() {
         this.state.isGameOver = true;
+        this.state.updateRecord()
         
         setTimeout(() => {
             alert('Game Over! Restarting from level 1...');
@@ -229,6 +231,7 @@ export class Game {
         this.powerUps = []
 
         this.loadLevel(1);
+        this.uiManager.updateRecord(this.state.record)
         this.uiManager.updateScore(0);
         this.uiManager.updateLives(3);
         this.uiManager.updateLevel(1);

@@ -4,6 +4,13 @@ export class UIManager {
         this.livesDisplay = document.getElementById('livesDisplay');
         this.levelDisplay = document.getElementById('levelDisplay');
         this.startPauseBtn = document.getElementById('startPauseBtn');
+        this.recordDisplay = document.getElementById('recordDisplay');
+    }
+
+    updateRecord (record) {
+        if (this.recordDisplay) {
+            this.recordDisplay.textContent = record
+        }
     }
 
     updateScore(score) {

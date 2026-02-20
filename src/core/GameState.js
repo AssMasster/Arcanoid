@@ -10,6 +10,7 @@ export class GameState {
         this.isGameOver = false;
         this.showStartScreen = true;
         this.levelCompleted = false;
+        this.record = this.getRecord() || 0;
     }
 
     reset() {
@@ -21,6 +22,20 @@ export class GameState {
         this.isGameOver = false;
         this.showStartScreen = true;
         this.levelCompleted = false;
+    }
+
+    getRecord () {
+        let record = localStorage.getItem("record")
+        console.log(record || 'пока нет')
+        return record
+    }
+
+    updateRecord () {
+        if (this.score > this.record) {
+            alert(`New Record: ${this.score}!!!`)
+            localStorage.setItem('record', this.score)
+            this.record = this.getRecord()
+        } 
     }
 
     decreaseLife() {

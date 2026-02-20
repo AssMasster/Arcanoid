@@ -33,6 +33,7 @@ export class ActiveWeaponMode {
 
     shoot(weaponManager, game) {
         // Создаём снаряды в зависимости от типа
+        game.soundManager.play(this.type)
         switch (this.type) {
             case 'LASER':
                 // Два лазера с краёв платформы
