@@ -197,6 +197,7 @@ export class Game {
         setTimeout(() => {
             if (this.state.nextLevel()) {
                 alert(`Level ${this.state.currentLevel - 1} complete! Moving to level ${this.state.currentLevel}!`);
+                this.uiManager.updateLevel(this.state.currentLevel);
                 this.loadLevel(this.state.currentLevel);
                 this.resetBall();
 
